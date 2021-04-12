@@ -30,10 +30,15 @@ class MainMenuActionHandler: NSResponder {
 
   @objc func menuSavePlaylist(_ sender: NSMenuItem) {
     Utility.quickSavePanel(title: "Save to playlist", types: ["m3u8"]) { (url) in
+      // Writes Extended M3U Playlist
       if url.isFileURL {
-        var playlist = ""
+        // File Header
+        var playlist = "#EXTM3U\n\n"
         for item in self.player.info.playlist {
-          playlist.append((item.filename + "\n"))
+          // Track Info
+          playlist.append("#EXTINF:-1,\(item.filenameForDisplay)\n")
+          // Track Path / URL
+          playlist.append("\(item.filename)\n\n")
         }
 
         do {
